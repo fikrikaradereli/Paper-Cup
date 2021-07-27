@@ -21,8 +21,7 @@ public class PlayerController : MonoBehaviour
     private float _rightBallCreationLimit = 0.25f;
 
     // Creating balls
-    private int _currentBallCount = 0;
-    private int _maxBallCount = 3;
+    private int _createdBallCount = 0;
 
     private void Update()
     {
@@ -77,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void CreateBall()
     {
-        if (_maxBallCount > _currentBallCount)
+        if (LevelManager.Instance.maxBallCount > _createdBallCount)
         {
             if (transform.position.x > _rightBallCreationLimit)
             {
@@ -87,7 +86,7 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject ball = Instantiate(_ballPrefab, _ballCreationPoint.position, Quaternion.identity);
             }
-            _currentBallCount++;
+            _createdBallCount++;
         }
     }
 }

@@ -1,15 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class LevelController : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField]
     private GameObject _paperCupPrefab;
     [SerializeField]
     private GameObject _platformPrefab;
 
-    private GameObject _playerPaperCup;
+    private GameObject _player;
     private GameObject[] _platforms;
     private GameObject[] _paperCups;
 
@@ -18,6 +19,11 @@ public class LevelController : MonoBehaviour
     private float _paperCupYPosition = -4f;
 
     private int _destroyedBallCount = 0;
+
+    public int maxBallCount = 3;
+    public float platformYSize = 0;
+
+    public static event Action OnPlatformComplete;
 
     private void Start()
     {
@@ -30,17 +36,17 @@ public class LevelController : MonoBehaviour
     private void OnEnable()
     {
         MediumCup.OnBallDestroy += HandleBallDestroy;
+        MediumCup.OnPlayerReplacement += HandlePlayerReplacement;
     }
 
     private void OnDisable()
     {
         MediumCup.OnBallDestroy -= HandleBallDestroy;
+        MediumCup.OnPlayerReplacement -= HandlePlayerReplacement;
     }
 
     private void CreatePlayerPlatformsAndPaperCups()
     {
-        float platformYSize = 0;
-
         for (int i = 0; i < _platformCount; i++)
         {
             if (i == 0)
@@ -70,14 +76,31 @@ public class LevelController : MonoBehaviour
             }
         }
 
-        _playerPaperCup = Instantiate(_paperCupPrefab, _playerStartPosition, Quaternion.identity);
-        _playerPaperCup.GetComponent<PlayerController>().enabled = true;
-        _playerPaperCup.name = "Player";
+        _player = Instantiate(_paperCupPrefab, _playerStartPosition, Quaternion.identity);
+        _player.GetComponent<PlayerController>().enabled = true;
+        _player.name = "Player";
     }
 
     private void HandleBallDestroy()
     {
         _destroyedBallCount++;
-        Debug.Log(_destroyedBallCount);
+        Debug.Log("_destroyedBallCount: " + _destroyedBallCount);
+
+        if (_destroyedBallCount == maxBallCount)
+        {
+            StartCoroutine(EmitPlatformComplete(0.5f));
+            _destroyedBallCount = 0;
+        }
+    }
+
+    private void HandlePlayerReplacement()
+    {
+        Debug.Log("HandlePlayerReplacement");
+    }
+
+    private IEnumerator EmitPlatformComplete(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        OnPlatformComplete?.Invoke();
     }
 }
