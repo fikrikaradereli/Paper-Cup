@@ -11,4 +11,6 @@ public class Level : ScriptableObject
     [Space]
     public int[] RightMultipliers;
     public int[] LeftMultipliers;
+
+    // Ball count for success
 }
