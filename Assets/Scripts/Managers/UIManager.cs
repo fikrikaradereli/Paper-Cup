@@ -12,15 +12,35 @@ public class UIManager : Singleton<UIManager>
 
     private void OnEnable()
     {
-        LevelManager.OnLevelSuccessful += HandleLevelSuccessful;
+        GameManager.GameStateChange += HandleGameStateChange;
     }
 
     private void OnDisable()
     {
-        LevelManager.OnLevelSuccessful -= HandleLevelSuccessful;
+        GameManager.GameStateChange -= HandleGameStateChange;
     }
 
-    private void HandleLevelSuccessful()
+    private void HandleGameStateChange(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.PREGAME:
+                break;
+            case GameState.RUNNING:
+                break;
+            case GameState.SUCCESSFUL:
+                Successful();
+                break;
+            case GameState.FAILED:
+                break;
+            case GameState.END:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void Successful()
     {
         Debug.Log("Level Successful");
     }
@@ -30,6 +50,7 @@ public class UIManager : Singleton<UIManager>
     public void StartGameButtonOnClick()
     {
         SceneManager.LoadScene("Game Scene");
+        GameManager.Instance.StartGame();
     }
 
     #endregion
