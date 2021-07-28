@@ -1,7 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -24,6 +25,7 @@ public class LevelManager : Singleton<LevelManager>
     public float platformYSize = 0;
 
     public static event Action OnPlatformComplete;
+    public static event Action OnLevelSuccessful;
 
     private void Start()
     {
@@ -88,19 +90,43 @@ public class LevelManager : Singleton<LevelManager>
 
         if (_destroyedBallCount == maxBallCount)
         {
-            StartCoroutine(EmitPlatformComplete(0.5f));
             _destroyedBallCount = 0;
+            StartCoroutine(EmitPlatformComplete(0.5f));
         }
     }
 
     private void HandlePlayerReplacement()
     {
-        Debug.Log("HandlePlayerReplacement");
-    }
+        Debug.Log("_paperCups.Length: " + _paperCups.Length);
 
+        Destroy(_player);
+        _player = _paperCups[0];
+
+        // Skip(): Bypasses a specified number of elements in a sequence and then returns the remaining elements.
+        _paperCups = _paperCups.Skip(1).ToArray();
+
+        _player.GetComponent<PlayerController>().enabled = true;
+        _player.name = "Player";
+
+        // _player'dan MediumCup scriptini kaldırır.
+        Destroy(_player.transform.GetChild(0).gameObject.GetComponent<MediumCup>());
+
+        // Destroy first platform
+        Destroy(_platforms[0]);
+        _platforms = _platforms.Skip(1).ToArray();
+
+    }
     private IEnumerator EmitPlatformComplete(float delay)
     {
         yield return new WaitForSeconds(delay);
-        OnPlatformComplete?.Invoke();
+
+        if (_platforms.Length > 1)
+        {
+            OnPlatformComplete?.Invoke();
+        }
+        else
+        {
+            OnLevelSuccessful?.Invoke();
+        }
     }
 }
