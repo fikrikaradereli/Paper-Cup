@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -17,11 +18,13 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
+        UIManager.OnStartGameButtonClick += StartGame;
         LevelManager.OnLevelSuccessful += LevelSuccessful;
     }
 
     private void OnDisable()
     {
+        UIManager.OnStartGameButtonClick -= StartGame;
         LevelManager.OnLevelSuccessful -= LevelSuccessful;
     }
 
@@ -31,8 +34,10 @@ public class GameManager : Singleton<GameManager>
         GameStateChange?.Invoke(state); // Emit the game state
     }
 
-    public void StartGame()
+    private void StartGame()
     {
+        SceneManager.LoadScene("Game Scene");
+
         UpdateState(GameState.RUNNING);
     }
 

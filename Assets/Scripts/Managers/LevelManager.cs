@@ -108,7 +108,7 @@ public class LevelManager : Singleton<LevelManager>
         _player.GetComponent<PlayerController>().enabled = true;
         _player.name = "Player";
 
-        // _player'dan MediumCup scriptini kaldırır.
+        // Removes MediumCup script from _player game object.
         Destroy(_player.transform.GetChild(0).gameObject.GetComponent<MediumCup>());
 
         // Destroy first platform

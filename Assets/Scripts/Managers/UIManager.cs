@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
+    public static event Action OnStartGameButtonClick;
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,8 +50,7 @@ public class UIManager : Singleton<UIManager>
 
     public void StartGameButtonOnClick()
     {
-        SceneManager.LoadScene("Game Scene");
-        GameManager.Instance.StartGame();
+        OnStartGameButtonClick?.Invoke();
     }
 
     #endregion
