@@ -47,7 +47,7 @@ public class MediumCup : MonoBehaviour
         if (_collidedBalls.Count > 0)
         {
             StopAllCoroutines();
-            StartCoroutine(Shifting(transform.parent.position.y - 5f));
+            StartCoroutine(Shifting(transform.parent.position.y - 4f));
         }
     }
 

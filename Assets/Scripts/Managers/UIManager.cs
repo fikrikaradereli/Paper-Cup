@@ -33,8 +33,10 @@ public class UIManager : Singleton<UIManager>
                 Successful();
                 break;
             case GameState.FAILED:
+                Failed();
                 break;
             case GameState.END:
+                End();
                 break;
             default:
                 break;
@@ -44,6 +46,15 @@ public class UIManager : Singleton<UIManager>
     private void Successful()
     {
         Debug.Log("Level Successful");
+    }
+    private void Failed()
+    {
+        Debug.Log("Level Failed");
+    }
+
+    private void End()
+    {
+        Debug.Log("The End");
     }
 
     #region Button Clicks

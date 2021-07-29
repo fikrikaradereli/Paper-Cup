@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void CreateBall()
     {
-        if (LevelManager.Instance.maxBallCount > _createdBallCount)
+        if (LevelManager.Instance.ballCount > _createdBallCount)
         {
             if (transform.position.x > _rightBallCreationLimit)
             {

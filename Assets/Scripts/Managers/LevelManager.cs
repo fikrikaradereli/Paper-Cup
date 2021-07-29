@@ -16,21 +16,24 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject[] _paperCups;
 
     private int _platformCount = 3;
-    private Vector3 _playerStartPosition = new Vector3(0, 4, 0);
+    private Vector3 _playerStartPosition = new Vector3(0, 4.5f, 0);
     private float _paperCupYPosition = -4f;
 
-    private int _destroyedBallCount = 0;
+    private int _currentBallCount = 0;
 
-    public int maxBallCount = 3;
+    public int ballCount;
     public float platformYSize = 0;
 
     public static event Action OnPlatformComplete;
     public static event Action OnLevelSuccessful;
+    public static event Action OnLevelFailed;
 
     private void Start()
     {
         _platforms = new GameObject[_platformCount];
         _paperCups = new GameObject[_platformCount];
+
+        ballCount = GameManager.Instance.CurrentLevel.BeginingBallCount;
 
         CreatePlayerPlatformsAndPaperCups();
     }
@@ -85,20 +88,16 @@ public class LevelManager : Singleton<LevelManager>
 
     private void HandleBallDestroy()
     {
-        _destroyedBallCount++;
-        Debug.Log("_destroyedBallCount: " + _destroyedBallCount);
+        _currentBallCount++;
 
-        if (_destroyedBallCount == maxBallCount)
+        if (_currentBallCount == ballCount)
         {
-            _destroyedBallCount = 0;
             StartCoroutine(EmitPlatformComplete(0.5f));
         }
     }
 
     private void HandlePlayerReplacement()
     {
-        Debug.Log("_paperCups.Length: " + _paperCups.Length);
-
         Destroy(_player);
         _player = _paperCups[0];
 
@@ -122,11 +121,23 @@ public class LevelManager : Singleton<LevelManager>
 
         if (_platforms.Length > 1)
         {
+            _currentBallCount = 0;
             OnPlatformComplete?.Invoke();
         }
         else
         {
-            OnLevelSuccessful?.Invoke();
+            //Debug.Log("Current Ball Count = " + _currentBallCount);
+            //Debug.Log("Ball Count = " + ballCount);
+            //Debug.Log("Ball Count For Success" + GameManager.Instance.CurrentLevel.BallCountForSuccess);
+
+            if (_currentBallCount > GameManager.Instance.CurrentLevel.BallCountForSuccess)
+            {
+                OnLevelSuccessful?.Invoke();
+            }
+            else
+            {
+                OnLevelFailed?.Invoke();
+            }
         }
     }
 }

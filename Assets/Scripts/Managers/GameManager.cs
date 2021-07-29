@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public GameState CurrentGameState { get; private set; }
+    public Level CurrentLevel { get; private set; }
+
+    [SerializeField]
+    private List<Level> levels;
 
     public static event Action<GameState> GameStateChange;
 
@@ -14,18 +18,32 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
 
         UpdateState(GameState.PREGAME);
+
+        int currentLevelIndex = PlayerPrefs.GetInt(Constants.PLAYER_PREFS_CURRENT_LEVEL_INDEX, -1);
+
+        // If PLAYER_PREFS_CURRENT_LEVEL_INDEX does not exist it is return -1
+        if (currentLevelIndex == -1)
+        {
+            CurrentLevel = levels[0];
+        }
+        else
+        {
+            CurrentLevel = levels[currentLevelIndex];
+        }
     }
 
     private void OnEnable()
     {
         UIManager.OnStartGameButtonClick += StartGame;
         LevelManager.OnLevelSuccessful += LevelSuccessful;
+        LevelManager.OnLevelFailed += LevelFailed;
     }
 
     private void OnDisable()
     {
         UIManager.OnStartGameButtonClick -= StartGame;
         LevelManager.OnLevelSuccessful -= LevelSuccessful;
+        LevelManager.OnLevelFailed -= LevelFailed;
     }
 
     private void UpdateState(GameState state)
@@ -43,7 +61,16 @@ public class GameManager : Singleton<GameManager>
 
     private void LevelSuccessful()
     {
-        UpdateState(GameState.SUCCESSFUL);
+        // Check whether it is the last level.
+        if (levels.IndexOf(CurrentLevel) == levels.Count - 1)
+        {
+            UpdateState(GameState.END);
+        }
+        else
+        {
+            UpdateState(GameState.SUCCESSFUL);
+            PlayerPrefs.SetInt(Constants.PLAYER_PREFS_CURRENT_LEVEL_INDEX, levels.IndexOf(CurrentLevel) + 1); // increase the level
+        }
     }
 
     private void LevelFailed()
