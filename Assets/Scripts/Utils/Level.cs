@@ -12,4 +12,9 @@ public class Level : ScriptableObject
     [Space]
     public int[] RightMultipliers;
     public int[] LeftMultipliers;
+
+    [Space]
+    [Space]
+    public Color[] RightMultiplierColors;
+    public Color[] LeftMultiplierColors;
 }

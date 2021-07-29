@@ -57,6 +57,11 @@ public class LevelManager : Singleton<LevelManager>
             if (i == 0)
             {
                 _platforms[i] = Instantiate(_platformPrefab);
+                _platforms[i].transform.GetChild(0).GetComponent<Multiplier>().IsLeft = true;
+                _platforms[i].transform.GetChild(0).GetComponent<Multiplier>().Index = i;
+                _platforms[i].transform.GetChild(1).GetComponent<Multiplier>().IsLeft = false;
+                _platforms[i].transform.GetChild(1).GetComponent<Multiplier>().Index = i;
+
                 _paperCups[i] = Instantiate(_paperCupPrefab, new Vector3(0, _paperCupYPosition, 0), Quaternion.identity);
                 _paperCups[i].transform.GetChild(0).gameObject.AddComponent<MediumCup>();
 
@@ -70,6 +75,11 @@ public class LevelManager : Singleton<LevelManager>
                                                 _platforms[i - 1].transform.position.y - platformYSize,
                                                 _platforms[i - 1].transform.position.z),
                                             Quaternion.AngleAxis(-90, Vector3.right));
+
+                _platforms[i].transform.GetChild(0).GetComponent<Multiplier>().IsLeft = true;
+                _platforms[i].transform.GetChild(0).GetComponent<Multiplier>().Index = i;
+                _platforms[i].transform.GetChild(1).GetComponent<Multiplier>().IsLeft = false;
+                _platforms[i].transform.GetChild(1).GetComponent<Multiplier>().Index = i;
 
                 _paperCups[i] = Instantiate(_paperCupPrefab,
                                             new Vector3(
