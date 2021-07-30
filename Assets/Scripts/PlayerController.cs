@@ -76,15 +76,15 @@ public class PlayerController : MonoBehaviour
 
     private void CreateBall()
     {
-        if (LevelManager.Instance.ballCount > _createdBallCount)
+        if (LevelManager.Instance.FabricableBallCount > _createdBallCount)
         {
             if (transform.position.x > _rightBallCreationLimit)
             {
-                GameObject ball = Instantiate(_ballPrefab, _ballCreationPoint2.position, Quaternion.identity);
+                Instantiate(_ballPrefab, _ballCreationPoint2.position, Quaternion.identity);
             }
             else
             {
-                GameObject ball = Instantiate(_ballPrefab, _ballCreationPoint.position, Quaternion.identity);
+                Instantiate(_ballPrefab, _ballCreationPoint.position, Quaternion.identity);
             }
             _createdBallCount++;
         }

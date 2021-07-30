@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     private void HandlePlatformComplete()
     {
         StopAllCoroutines();
-        StartCoroutine(Shifting(transform.position.y - LevelManager.Instance.platformYSize));
+        StartCoroutine(Shifting(transform.position.y - LevelManager.Instance.PlatformYSize));
     }
 
     IEnumerator Shifting(float desiredPosY)

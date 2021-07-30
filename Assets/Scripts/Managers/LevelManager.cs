@@ -19,10 +19,11 @@ public class LevelManager : Singleton<LevelManager>
     private Vector3 _playerStartPosition = new Vector3(0, 4.5f, 0);
     private float _paperCupYPosition = -4f;
 
-    private int _currentBallCount = 0;
+    private int _destroyedBallCount = 0;
 
-    public int ballCount;
-    public float platformYSize = 0;
+    public int BallCount { get; private set; }
+    public int FabricableBallCount { get; private set; }
+    public float PlatformYSize { get; private set; } = 0;
 
     public static event Action OnPlatformComplete;
     public static event Action OnLevelSuccessful;
@@ -33,7 +34,8 @@ public class LevelManager : Singleton<LevelManager>
         _platforms = new GameObject[_platformCount];
         _paperCups = new GameObject[_platformCount];
 
-        ballCount = GameManager.Instance.CurrentLevel.BeginingBallCount;
+        BallCount = GameManager.Instance.CurrentLevel.BeginingBallCount;
+        FabricableBallCount = BallCount;
 
         CreatePlayerPlatformsAndPaperCups();
     }
@@ -42,12 +44,14 @@ public class LevelManager : Singleton<LevelManager>
     {
         MediumCup.OnBallDestroy += HandleBallDestroy;
         MediumCup.OnPlayerReplacement += HandlePlayerReplacement;
+        Multiplier.OnMultiplierCollision += HandleMultiplierCollision;
     }
 
     private void OnDisable()
     {
         MediumCup.OnBallDestroy -= HandleBallDestroy;
         MediumCup.OnPlayerReplacement -= HandlePlayerReplacement;
+        Multiplier.OnMultiplierCollision -= HandleMultiplierCollision;
     }
 
     private void CreatePlayerPlatformsAndPaperCups()
@@ -65,14 +69,14 @@ public class LevelManager : Singleton<LevelManager>
                 _paperCups[i] = Instantiate(_paperCupPrefab, new Vector3(0, _paperCupYPosition, 0), Quaternion.identity);
                 _paperCups[i].transform.GetChild(0).gameObject.AddComponent<MediumCup>();
 
-                platformYSize = _platforms[i].GetComponent<Renderer>().bounds.size.y;
+                PlatformYSize = _platforms[i].GetComponent<Renderer>().bounds.size.y;
             }
             else
             {
                 _platforms[i] = Instantiate(_platformPrefab,
                                             new Vector3(
                                                 _platforms[i - 1].transform.position.x,
-                                                _platforms[i - 1].transform.position.y - platformYSize,
+                                                _platforms[i - 1].transform.position.y - PlatformYSize,
                                                 _platforms[i - 1].transform.position.z),
                                             Quaternion.AngleAxis(-90, Vector3.right));
 
@@ -84,7 +88,7 @@ public class LevelManager : Singleton<LevelManager>
                 _paperCups[i] = Instantiate(_paperCupPrefab,
                                             new Vector3(
                                                 0,
-                                                _paperCupYPosition - (i * platformYSize),
+                                                _paperCupYPosition - (i * PlatformYSize),
                                                 0),
                                             Quaternion.identity);
                 _paperCups[i].transform.GetChild(0).gameObject.AddComponent<MediumCup>();
@@ -98,9 +102,9 @@ public class LevelManager : Singleton<LevelManager>
 
     private void HandleBallDestroy()
     {
-        _currentBallCount++;
+        _destroyedBallCount++;
 
-        if (_currentBallCount == ballCount)
+        if (_destroyedBallCount == BallCount)
         {
             StartCoroutine(EmitPlatformComplete(0.5f));
         }
@@ -125,22 +129,25 @@ public class LevelManager : Singleton<LevelManager>
         _platforms = _platforms.Skip(1).ToArray();
 
     }
+
+    private void HandleMultiplierCollision(int multiplier)
+    {
+        BallCount += multiplier;
+    }
+
     private IEnumerator EmitPlatformComplete(float delay)
     {
         yield return new WaitForSeconds(delay);
 
         if (_platforms.Length > 1)
         {
-            _currentBallCount = 0;
+            _destroyedBallCount = 0;
+            FabricableBallCount = BallCount;
             OnPlatformComplete?.Invoke();
         }
         else
         {
-            //Debug.Log("Current Ball Count = " + _currentBallCount);
-            //Debug.Log("Ball Count = " + ballCount);
-            //Debug.Log("Ball Count For Success" + GameManager.Instance.CurrentLevel.BallCountForSuccess);
-
-            if (_currentBallCount > GameManager.Instance.CurrentLevel.BallCountForSuccess)
+            if (_destroyedBallCount > GameManager.Instance.CurrentLevel.BallCountForSuccess)
             {
                 OnLevelSuccessful?.Invoke();
             }
