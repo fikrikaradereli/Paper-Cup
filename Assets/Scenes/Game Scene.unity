@@ -154,8 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _paperCupPrefab: {fileID: 5593327578750705157, guid: a5840160dba92cc4c99ba44c3eb34a9f, type: 3}
   _platformPrefab: {fileID: 6631682439897577852, guid: 7f83f3b142745f24481f1536022151aa, type: 3}
-  maxBallCount: 3
-  platformYSize: 0
+  _scoreTextPrefab: {fileID: 2154643263239711895, guid: 9aba91d74a025714d865f224daa9949c, type: 3}
 --- !u!4 &6624359
 Transform:
   m_ObjectHideFlags: 0

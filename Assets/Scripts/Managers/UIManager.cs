@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
+    [SerializeField]
+    private GameObject _scoreTextPrefab;
+
     public static event Action OnStartGameButtonClick;
 
     protected override void Awake()
@@ -14,11 +17,13 @@ public class UIManager : Singleton<UIManager>
     private void OnEnable()
     {
         GameManager.GameStateChange += HandleGameStateChange;
+        LevelManager.OnLastPaperCupCreate += HandleLastPaperCupCreate;
     }
 
     private void OnDisable()
     {
         GameManager.GameStateChange -= HandleGameStateChange;
+        LevelManager.OnLastPaperCupCreate -= HandleLastPaperCupCreate;
     }
 
     private void HandleGameStateChange(GameState state)
@@ -41,6 +46,11 @@ public class UIManager : Singleton<UIManager>
             default:
                 break;
         }
+    }
+
+    private void HandleLastPaperCupCreate(Transform transform)
+    {
+        GameObject scoreTextGameObject = Instantiate(_scoreTextPrefab, transform);
     }
 
     private void Successful()

@@ -28,6 +28,7 @@ public class LevelManager : Singleton<LevelManager>
     public static event Action OnPlatformComplete;
     public static event Action OnLevelSuccessful;
     public static event Action OnLevelFailed;
+    public static event Action<Transform> OnLastPaperCupCreate;
 
     private void Start()
     {
@@ -94,6 +95,8 @@ public class LevelManager : Singleton<LevelManager>
                 _paperCups[i].transform.GetChild(0).gameObject.AddComponent<MediumCup>();
             }
         }
+
+        OnLastPaperCupCreate?.Invoke(_paperCups[_paperCups.Length - 1].transform);
 
         _player = Instantiate(_paperCupPrefab, _playerStartPosition, Quaternion.identity);
         _player.GetComponent<PlayerController>().enabled = true;
