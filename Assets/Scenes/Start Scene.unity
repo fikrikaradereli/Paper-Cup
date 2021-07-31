@@ -986,7 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45432cb12a29804ab6a93d96908e7bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreTextPrefab: {fileID: 2154643263239711895, guid: 9aba91d74a025714d865f224daa9949c, type: 3}
+  _scoreTextCanvasPrefab: {fileID: 2154643263239711895, guid: 9aba91d74a025714d865f224daa9949c, type: 3}
 --- !u!4 &1612407920
 Transform:
   m_ObjectHideFlags: 0

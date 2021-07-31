@@ -29,6 +29,7 @@ public class LevelManager : Singleton<LevelManager>
     public static event Action OnLevelSuccessful;
     public static event Action OnLevelFailed;
     public static event Action<Transform> OnLastPaperCupCreate;
+    public static event Action<int> OnScoreAdd;
 
     private void Start()
     {
@@ -106,6 +107,11 @@ public class LevelManager : Singleton<LevelManager>
     private void HandleBallDestroy()
     {
         _destroyedBallCount++;
+
+        if (_platforms.Length == 1)
+        {
+            OnScoreAdd?.Invoke(_destroyedBallCount);
+        }
 
         if (_destroyedBallCount == BallCount)
         {

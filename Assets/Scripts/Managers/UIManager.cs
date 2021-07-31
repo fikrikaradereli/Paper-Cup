@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField]
-    private GameObject _scoreTextPrefab;
+    private GameObject _scoreTextCanvasPrefab;
+
+    private TextMeshProUGUI _scoreText;
 
     public static event Action OnStartGameButtonClick;
 
@@ -18,12 +21,14 @@ public class UIManager : Singleton<UIManager>
     {
         GameManager.GameStateChange += HandleGameStateChange;
         LevelManager.OnLastPaperCupCreate += HandleLastPaperCupCreate;
+        LevelManager.OnScoreAdd += HandleScoreAdd;
     }
 
     private void OnDisable()
     {
         GameManager.GameStateChange -= HandleGameStateChange;
         LevelManager.OnLastPaperCupCreate -= HandleLastPaperCupCreate;
+        LevelManager.OnScoreAdd -= HandleScoreAdd;
     }
 
     private void HandleGameStateChange(GameState state)
@@ -50,7 +55,13 @@ public class UIManager : Singleton<UIManager>
 
     private void HandleLastPaperCupCreate(Transform transform)
     {
-        GameObject scoreTextGameObject = Instantiate(_scoreTextPrefab, transform);
+        GameObject scoreTextCanvas = Instantiate(_scoreTextCanvasPrefab, transform);
+        _scoreText = scoreTextCanvas.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+    }
+
+    private void HandleScoreAdd(int score)
+    {
+        _scoreText.text = score + "/" + GameManager.Instance.CurrentLevel.BallCountForSuccess;
     }
 
     private void Successful()
