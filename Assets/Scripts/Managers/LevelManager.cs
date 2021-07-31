@@ -15,7 +15,7 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject[] _platforms;
     private GameObject[] _paperCups;
 
-    private int _platformCount = 3;
+    private int _platformCount;
     private Vector3 _playerStartPosition = new Vector3(0, 4.5f, 0);
     private float _paperCupYPosition = -4f;
 
@@ -33,6 +33,8 @@ public class LevelManager : Singleton<LevelManager>
 
     private void Start()
     {
+        _platformCount = GameManager.Instance.CurrentLevel.PlatformCount;
+
         _platforms = new GameObject[_platformCount];
         _paperCups = new GameObject[_platformCount];
 
