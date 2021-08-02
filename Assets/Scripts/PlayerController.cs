@@ -25,25 +25,28 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (GameManager.Instance.CurrentGameState == GameState.RUNNING)
         {
-            _deltaX = Input.mousePosition.x - transform.position.x; // For drag
+            if (Input.GetMouseButtonDown(0))
+            {
+                _deltaX = Input.mousePosition.x - transform.position.x; // For drag
 
-            StopAllCoroutines();
-            StartCoroutine(RotateZ(-90));
+                StopAllCoroutines();
+                StartCoroutine(RotateZ(-90));
 
-            InvokeRepeating(nameof(CreateBall), 0.5f, 1f);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            Drag();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            StopAllCoroutines();
-            StartCoroutine(RotateZ(0));
+                InvokeRepeating(nameof(CreateBall), 0.5f, 1f);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                Drag();
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                StopAllCoroutines();
+                StartCoroutine(RotateZ(0));
 
-            CancelInvoke(nameof(CreateBall));
+                CancelInvoke(nameof(CreateBall));
+            }
         }
     }
 
