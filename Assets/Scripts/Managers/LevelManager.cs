@@ -20,7 +20,7 @@ public class LevelManager : Singleton<LevelManager>
     private Vector3 _playerStartPosition = new Vector3(0, 4.5f, 0);
     private float _paperCupYPosition = -4f;
 
-    private int _destroyedBallCount = 0;
+    private int _destroyedBallCount;
 
     public int BallCount { get; private set; }
     public int FabricableBallCount { get; private set; }
@@ -55,6 +55,7 @@ public class LevelManager : Singleton<LevelManager>
         if (scene.name == "Game Scene")
         {
             _platformCount = GameManager.Instance.CurrentLevel.PlatformCount;
+            _destroyedBallCount = 0;
 
             _platforms = new GameObject[_platformCount];
             _paperCups = new GameObject[_platformCount];
