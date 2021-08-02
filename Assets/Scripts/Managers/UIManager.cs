@@ -11,6 +11,8 @@ public class UIManager : Singleton<UIManager>
     private CanvasGroup _popupMenuSuccessful;
     [SerializeField]
     private CanvasGroup _popupMenuFail;
+    [SerializeField]
+    private TextMeshProUGUI _totalScoreText;
 
     private TextMeshProUGUI _scoreText;
 
@@ -71,6 +73,7 @@ public class UIManager : Singleton<UIManager>
     private void Successful()
     {
         _popupMenuSuccessful.gameObject.SetActive(true);
+        _totalScoreText.text = GameManager.Instance.TotalScore.ToString();
         _popupMenuSuccessful.alpha = 0;
         _popupMenuSuccessful.LeanAlpha(1f, .5f);
     }

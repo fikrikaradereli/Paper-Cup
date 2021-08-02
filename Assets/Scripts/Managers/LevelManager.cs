@@ -26,7 +26,7 @@ public class LevelManager : Singleton<LevelManager>
     public float PlatformYSize { get; private set; } = 0;
 
     public static event Action OnPlatformComplete;
-    public static event Action OnLevelSuccessful;
+    public static event Action<int> OnLevelSuccessful;
     public static event Action OnLevelFailed;
     public static event Action<Transform> OnLastPaperCupCreate;
     public static event Action<int> OnScoreAdd;
@@ -160,7 +160,7 @@ public class LevelManager : Singleton<LevelManager>
         {
             if (_destroyedBallCount > GameManager.Instance.CurrentLevel.BallCountForSuccess)
             {
-                OnLevelSuccessful?.Invoke();
+                OnLevelSuccessful?.Invoke(_destroyedBallCount);
             }
             else
             {
