@@ -7,6 +7,10 @@ public class UIManager : Singleton<UIManager>
 {
     [SerializeField]
     private GameObject _scoreTextCanvasPrefab;
+    [SerializeField]
+    private CanvasGroup _popupMenuSuccessful;
+    [SerializeField]
+    private CanvasGroup _popupMenuFail;
 
     private TextMeshProUGUI _scoreText;
 
@@ -66,8 +70,11 @@ public class UIManager : Singleton<UIManager>
 
     private void Successful()
     {
-        Debug.Log("Level Successful");
+        _popupMenuSuccessful.gameObject.SetActive(true);
+        _popupMenuSuccessful.alpha = 0;
+        _popupMenuSuccessful.LeanAlpha(1f, .5f);
     }
+
     private void Failed()
     {
         Debug.Log("Level Failed");
@@ -83,6 +90,16 @@ public class UIManager : Singleton<UIManager>
     public void StartGameButtonOnClick()
     {
         OnStartGameButtonClick?.Invoke();
+    }
+
+    public void NextLevelButtonOnClick()
+    {
+        Debug.Log("NEXT LEVEL");
+    }
+
+    public void RestartButtonOnClick()
+    {
+        Debug.Log("RESTART");
     }
 
     #endregion
