@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Level 1
   PlatformCount: 3
   BeginingBallCount: 2
-  BallCountForSuccess: 7
+  BallCountForSuccess: 70
   RightMultipliers: 020000000300000001000000
   LeftMultipliers: 010000000200000004000000
   RightMultiplierColors:

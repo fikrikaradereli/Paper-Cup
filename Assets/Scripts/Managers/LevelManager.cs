@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
 
@@ -31,21 +32,10 @@ public class LevelManager : Singleton<LevelManager>
     public static event Action<Transform> OnLastPaperCupCreate;
     public static event Action<int> OnScoreAdd;
 
-    private void Start()
-    {
-        _platformCount = GameManager.Instance.CurrentLevel.PlatformCount;
-
-        _platforms = new GameObject[_platformCount];
-        _paperCups = new GameObject[_platformCount];
-
-        BallCount = GameManager.Instance.CurrentLevel.BeginingBallCount;
-        FabricableBallCount = BallCount;
-
-        CreatePlayerPlatformsAndPaperCups();
-    }
-
     private void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         MediumCup.OnBallDestroy += HandleBallDestroy;
         MediumCup.OnPlayerReplacement += HandlePlayerReplacement;
         Multiplier.OnMultiplierCollision += HandleMultiplierCollision;
@@ -53,9 +43,27 @@ public class LevelManager : Singleton<LevelManager>
 
     private void OnDisable()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
         MediumCup.OnBallDestroy -= HandleBallDestroy;
         MediumCup.OnPlayerReplacement -= HandlePlayerReplacement;
         Multiplier.OnMultiplierCollision -= HandleMultiplierCollision;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Game Scene")
+        {
+            _platformCount = GameManager.Instance.CurrentLevel.PlatformCount;
+
+            _platforms = new GameObject[_platformCount];
+            _paperCups = new GameObject[_platformCount];
+
+            BallCount = GameManager.Instance.CurrentLevel.BeginingBallCount;
+            FabricableBallCount = BallCount;
+
+            CreatePlayerPlatformsAndPaperCups();
+        }
     }
 
     private void CreatePlayerPlatformsAndPaperCups()

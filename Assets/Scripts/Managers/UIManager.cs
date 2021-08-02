@@ -80,7 +80,9 @@ public class UIManager : Singleton<UIManager>
 
     private void Failed()
     {
-        Debug.Log("Level Failed");
+        _popupMenuFail.gameObject.SetActive(true);
+        _popupMenuFail.alpha = 0;
+        _popupMenuFail.LeanAlpha(1f, .5f);
     }
 
     private void End()
@@ -102,7 +104,8 @@ public class UIManager : Singleton<UIManager>
 
     public void RestartButtonOnClick()
     {
-        Debug.Log("RESTART");
+        _popupMenuFail.gameObject.SetActive(false);
+        StartGameButtonOnClick();
     }
 
     #endregion
