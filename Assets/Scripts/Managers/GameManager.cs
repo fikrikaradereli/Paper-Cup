@@ -19,7 +19,10 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
 
         UpdateState(GameState.PREGAME);
+    }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
         int currentLevelIndex = PlayerPrefs.GetInt(Constants.PLAYER_PREFS_CURRENT_LEVEL_INDEX, -1);
 
         // If PLAYER_PREFS_CURRENT_LEVEL_INDEX does not exist it is return -1
@@ -37,14 +40,18 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
-        UIManager.OnStartGameButtonClick += StartGame;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        UIManager.OnStartGameScene += StartGame;
         LevelManager.OnLevelSuccessful += LevelSuccessful;
         LevelManager.OnLevelFailed += LevelFailed;
     }
 
     private void OnDisable()
     {
-        UIManager.OnStartGameButtonClick -= StartGame;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        UIManager.OnStartGameScene -= StartGame;
         LevelManager.OnLevelSuccessful -= LevelSuccessful;
         LevelManager.OnLevelFailed -= LevelFailed;
     }

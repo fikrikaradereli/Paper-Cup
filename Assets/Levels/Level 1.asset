@@ -13,16 +13,12 @@ MonoBehaviour:
   m_Name: Level 1
   m_EditorClassIdentifier: 
   Name: Level 1
-  PlatformCount: 3
-  BeginingBallCount: 2
-  BallCountForSuccess: 70
-  RightMultipliers: 020000000300000001000000
-  LeftMultipliers: 010000000200000004000000
+  PlatformCount: 1
+  BeginingBallCount: 3
+  BallCountForSuccess: 10
+  RightMultipliers: 04000000
+  LeftMultipliers: 02000000
   RightMultiplierColors:
-  - {r: 0.3870343, g: 1, b: 0, a: 0.5882353}
-  - {r: 0, g: 0.2876296, b: 1, a: 0.5882353}
-  - {r: 1, g: 0, b: 0.90046024, a: 0.5882353}
+  - {r: 0, g: 1, b: 0.93424654, a: 0.5882353}
   LeftMultiplierColors:
-  - {r: 1, g: 0, b: 0, a: 0.5882353}
-  - {r: 1, g: 0.9496023, b: 0, a: 0.5882353}
-  - {r: 0, g: 1, b: 0.7384665, a: 0.5882353}
+  - {r: 0, g: 1, b: 0.015290737, a: 0.5882353}

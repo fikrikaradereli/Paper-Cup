@@ -16,7 +16,7 @@ public class UIManager : Singleton<UIManager>
 
     private TextMeshProUGUI _scoreText;
 
-    public static event Action OnStartGameButtonClick;
+    public static event Action OnStartGameScene;
 
     protected override void Awake()
     {
@@ -94,18 +94,19 @@ public class UIManager : Singleton<UIManager>
 
     public void StartGameButtonOnClick()
     {
-        OnStartGameButtonClick?.Invoke();
+        OnStartGameScene?.Invoke();
     }
 
     public void NextLevelButtonOnClick()
     {
-        Debug.Log("NEXT LEVEL");
+        _popupMenuSuccessful.gameObject.SetActive(false);
+        OnStartGameScene?.Invoke();
     }
 
     public void RestartButtonOnClick()
     {
         _popupMenuFail.gameObject.SetActive(false);
-        StartGameButtonOnClick();
+        OnStartGameScene?.Invoke();
     }
 
     #endregion
