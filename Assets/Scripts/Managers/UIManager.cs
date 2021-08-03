@@ -12,7 +12,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private CanvasGroup _popupMenuFail;
     [SerializeField]
+    private CanvasGroup _winScreen;
+    [SerializeField]
     private TextMeshProUGUI _totalScoreText;
+    [SerializeField]
+    private TextMeshProUGUI _winScreenTotalScoreText;
 
     private TextMeshProUGUI _scoreText;
 
@@ -87,7 +91,10 @@ public class UIManager : Singleton<UIManager>
 
     private void End()
     {
-        Debug.Log("The End");
+        _winScreen.gameObject.SetActive(true);
+        _winScreenTotalScoreText.text = GameManager.Instance.TotalScore.ToString();
+        _winScreen.alpha = 0;
+        _winScreen.LeanAlpha(1f, .5f);
     }
 
     #region Button Clicks
