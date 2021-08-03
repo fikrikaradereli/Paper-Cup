@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Linq;
+using TMPro;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -15,6 +16,8 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject _player;
     private GameObject[] _platforms;
     private GameObject[] _paperCups;
+
+    private TextMeshProUGUI _playerText;
 
     private int _platformCount;
     private Vector3 _playerStartPosition = new Vector3(0, 4.5f, 0);
@@ -39,6 +42,7 @@ public class LevelManager : Singleton<LevelManager>
         MediumCup.OnBallDestroy += HandleBallDestroy;
         MediumCup.OnPlayerReplacement += HandlePlayerReplacement;
         Multiplier.OnMultiplierCollision += HandleMultiplierCollision;
+        PlayerController.OnBallCreate += HandleBallCreate;
     }
 
     private void OnDisable()
@@ -48,6 +52,8 @@ public class LevelManager : Singleton<LevelManager>
         MediumCup.OnBallDestroy -= HandleBallDestroy;
         MediumCup.OnPlayerReplacement -= HandlePlayerReplacement;
         Multiplier.OnMultiplierCollision -= HandleMultiplierCollision;
+        PlayerController.OnBallCreate -= HandleBallCreate;
+
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -113,6 +119,11 @@ public class LevelManager : Singleton<LevelManager>
         _player = Instantiate(_paperCupPrefab, _playerStartPosition, Quaternion.identity);
         _player.GetComponent<PlayerController>().enabled = true;
         _player.name = "Player";
+
+        Transform playerTextCanvasTransform = _player.transform.GetChild(2);
+        playerTextCanvasTransform.gameObject.SetActive(true);
+        _playerText = playerTextCanvasTransform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _playerText.text = FabricableBallCount.ToString();
     }
 
     private void HandleBallDestroy()
@@ -143,6 +154,11 @@ public class LevelManager : Singleton<LevelManager>
 
         // Removes MediumCup script from _player game object.
         Destroy(_player.transform.GetChild(0).gameObject.GetComponent<MediumCup>());
+
+        Transform playerTextCanvasTransform = _player.transform.GetChild(2);
+        playerTextCanvasTransform.gameObject.SetActive(true);
+        _playerText = playerTextCanvasTransform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _playerText.text = FabricableBallCount.ToString();
 
         // Destroy first platform
         Destroy(_platforms[0]);
@@ -176,5 +192,10 @@ public class LevelManager : Singleton<LevelManager>
                 OnLevelFailed?.Invoke();
             }
         }
+    }
+
+    private void HandleBallCreate(int createdBallCount)
+    {
+        _playerText.text = (FabricableBallCount - createdBallCount).ToString();
     }
 }

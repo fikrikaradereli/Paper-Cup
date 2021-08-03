@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
     // Creating balls
     private int _createdBallCount = 0;
+
+    public static event Action<int> OnBallCreate;
 
     private void Update()
     {
@@ -90,6 +93,7 @@ public class PlayerController : MonoBehaviour
                 Instantiate(_ballPrefab, _ballCreationPoint.position, Quaternion.identity);
             }
             _createdBallCount++;
+            OnBallCreate?.Invoke(_createdBallCount);
         }
     }
 }
