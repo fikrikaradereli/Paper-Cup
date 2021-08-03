@@ -67,6 +67,7 @@ public class UIManager : Singleton<UIManager>
     {
         GameObject scoreTextCanvas = Instantiate(_scoreTextCanvasPrefab, transform);
         _scoreText = scoreTextCanvas.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _scoreText.text = "0/" + GameManager.Instance.CurrentLevel.BallCountForSuccess;
     }
 
     private void HandleScoreAdd(int score)
